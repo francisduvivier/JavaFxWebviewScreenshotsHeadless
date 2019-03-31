@@ -26,9 +26,8 @@ import static javafx.concurrent.Worker.State;
 public class Main extends Application {
     @NotNull
     private static final int DEFAULT_EXTRA_PAGE_LOAD_TIME = 5000;
-    private static final int MAX_PAGE_LOAD_TIME = 20000;
     private static boolean DEBUG_MODE = true;
-    private static String DEMO_URL = "http://urlecho.appspot.com/echo?body=%3Ch1%3EPlease%20pass%20the%20URL%20as%20the%20first%20parameter%20to%20the%20program%3C/h1%3E";
+    private static String DEMO_URL = "http://urlecho.appspot.com/echo?body=<h1>Please pass a valid url parameter!</h1>";
     private static String DEMO_PATH = "screenshot.png";
 
     public static void main(String[] args) {
@@ -70,10 +69,14 @@ public class Main extends Application {
             tempExtraPageLoadTime = DEFAULT_EXTRA_PAGE_LOAD_TIME;
         }
         final int extraPageLoadTime = tempExtraPageLoadTime;
-        takeScreenshot(stage, outputPath, url, extraPageLoadTime);
+        takeScreenshot(outputPath, url, extraPageLoadTime);
     }
 
-    public static void takeScreenshot(Stage stage, String outputPath, String url, int extraPageLoadTime) {
+    public static void takeScreenshot(String outputPath, String url) {
+        takeScreenshot(outputPath, url, DEFAULT_EXTRA_PAGE_LOAD_TIME);
+    }
+
+    public static void takeScreenshot(String outputPath, String url, int extraPageLoadTime) {
         try {
             url = new URL(url).toString();
         } catch (MalformedURLException e) {
@@ -81,9 +84,7 @@ public class Main extends Application {
             e.printStackTrace();
             url = DEMO_URL;
         }
-        if (stage == null) {
-            stage = new Stage();
-        }
+
         // Create the WebView
         WebView webView = new WebView();
         // Create the WebEngine
@@ -118,16 +119,18 @@ public class Main extends Application {
                 }
             }
         });
-        startWebviewRendering(stage, webView);
+        startWebviewRendering(webView);
     }
 
-    private static void startWebviewRendering(Stage stage, WebView webView) {
+    private static void startWebviewRendering(WebView webView) {
         // Create the VBox
         VBox root = new VBox();
         // Add the WebView to the VBox
         root.getChildren().add(webView);
         Scene scene = new Scene(root);
-        // Add  the Scene to the Stage
+        // Add  the Scene to a Stage
+        Stage stage = new Stage();
+
         stage.setScene(scene);
         // Display the Stage (Headless because we use Monocle)
         stage.show();
