@@ -26,6 +26,7 @@ import static javafx.concurrent.Worker.State;
 public class WebViewSnapshotter extends Application {
     @NotNull
     private static final int DEFAULT_EXTRA_PAGE_LOAD_TIME = 5000;
+    private static final int MAX_PAGE_LOAD_TIME = 20000;
     private static boolean DEBUG_MODE = true;
     private static String DEMO_URL = "http://urlecho.appspot.com/echo?body=%3Ch1%3EPlease%20pass%20the%20URL%20as%20the%20first%20parameter%20to%20the%20program%3C/h1%3E";
     private static String DEMO_PATH = "screenshot.png";
@@ -104,12 +105,7 @@ public class WebViewSnapshotter extends Application {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        Platform.runLater(() -> {
-                            doSnapshot(webView, outputFile);
-                            if (DEBUG_MODE) {
-                                System.out.printf("Screenshot made and saved to [%s]%n", outputFile.getAbsolutePath());
-                            }
-                        });
+                        doSnapshot(webView, outputFile);
                     }).start();
                 }
             }
@@ -130,12 +126,17 @@ public class WebViewSnapshotter extends Application {
     }
 
     private void doSnapshot(WebView webView, File outputFile) {
-        WritableImage snapshot = webView.snapshot(null, null);
-        BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
-        try {
-            ImageIO.write(image, "png", outputFile);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Platform.runLater(() -> {
+            WritableImage snapshot = webView.snapshot(null, null);
+            BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
+            try {
+                ImageIO.write(image, "png", outputFile);
+                if (DEBUG_MODE) {
+                    System.out.printf("Screenshot made and saved to [%s]%n", outputFile.getAbsolutePath());
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }
