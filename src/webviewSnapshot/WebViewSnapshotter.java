@@ -57,10 +57,12 @@ public class WebViewSnapshotter extends Application {
         int tempExtraPageLoadTime = -1;
         String extraTimeArgument = namedParameters.get("extraTime");
 
-        try {
-            tempExtraPageLoadTime = Integer.parseInt(extraTimeArgument);
-        } catch (Exception e) {
-            e.printStackTrace();
+        if (extraTimeArgument != null) {
+            try {
+                tempExtraPageLoadTime = Integer.parseInt(extraTimeArgument);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
         }
 
         if (tempExtraPageLoadTime == -1) {
