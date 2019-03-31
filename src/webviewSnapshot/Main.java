@@ -23,7 +23,7 @@ import java.util.Map;
 
 import static javafx.concurrent.Worker.State;
 
-public class WebViewSnapshotter extends Application {
+public class Main extends Application {
     @NotNull
     private static final int DEFAULT_EXTRA_PAGE_LOAD_TIME = 5000;
     private static final int MAX_PAGE_LOAD_TIME = 20000;
