@@ -2,34 +2,14 @@ package webviewSnapshot;
 
 import com.sun.istack.internal.NotNull;
 import javafx.application.Application;
-import javafx.application.Platform;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.Scene;
-import javafx.scene.image.WritableImage;
-import javafx.scene.layout.VBox;
-import javafx.scene.web.WebEngine;
-import javafx.scene.web.WebView;
 import javafx.stage.Stage;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.Map;
 
-import static javafx.concurrent.Worker.State;
+import static webviewSnapshot.StaticConfig.*;
+import static webviewSnapshot.WebviewScreenshots.takeScreenshot;
 
 public class Main extends Application {
-    @NotNull
-    private static final int DEFAULT_EXTRA_PAGE_LOAD_TIME = 5000;
-    private static boolean DEBUG_MODE = true;
-    private static String DEMO_URL = "http://urlecho.appspot.com/echo?body=<h1>Please pass a valid url parameter!</h1>";
-    private static String DEMO_PATH = "screenshot.png";
-
     public static void main(String[] args) {
         Application.launch(args);
     }
@@ -72,82 +52,5 @@ public class Main extends Application {
         takeScreenshot(outputPath, url, extraPageLoadTime);
     }
 
-    public static void takeScreenshot(String outputPath, String url) {
-        takeScreenshot(outputPath, url, DEFAULT_EXTRA_PAGE_LOAD_TIME);
-    }
 
-    public static void takeScreenshot(String outputPath, String url, int extraPageLoadTime) {
-        try {
-            url = new URL(url).toString();
-        } catch (MalformedURLException e) {
-            System.out.printf("WARNING: The given url is invalid, now using Demo Url instead%n");
-            e.printStackTrace();
-            url = DEMO_URL;
-        }
-
-        // Create the WebView
-        WebView webView = new WebView();
-        // Create the WebEngine
-        final WebEngine webEngine = webView.getEngine();
-
-        // Try to create the output file directory
-        File outputFile = new File(outputPath);
-        File dir = outputFile.getAbsoluteFile().getParentFile();
-        dir.mkdirs();
-
-        // Load the Page
-        webEngine.load(url);
-
-        // Update the stage title when a new web page title is available
-        webEngine.getLoadWorker().stateProperty().addListener(new ChangeListener<State>() {
-            public void changed(ObservableValue<? extends State> ov, State oldState, State newState) {
-                if (DEBUG_MODE) {
-                    System.out.printf("Received page state: [%s], now waiting for %s seconds to make screenshot%n", newState, extraPageLoadTime / 1000D);
-                }
-                if (newState == State.SUCCEEDED || newState == State.FAILED || newState == State.CANCELLED) {
-                    if (newState == State.FAILED || newState == State.CANCELLED) {
-                        System.out.printf("WARNING: Page load was not successful, received state [%s] but trying to make a screenshot anyways%n", newState);
-                    }
-                    new Thread(() -> {
-                        try {
-                            Thread.sleep(extraPageLoadTime); //Wait extra because async javascript might still be executing and changing the page.
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                        }
-                        doSnapshot(webView, outputFile);
-                    }).start();
-                }
-            }
-        });
-        startWebviewRendering(webView);
-    }
-
-    private static void startWebviewRendering(WebView webView) {
-        // Create the VBox
-        VBox root = new VBox();
-        // Add the WebView to the VBox
-        root.getChildren().add(webView);
-        Scene scene = new Scene(root);
-        // Add  the Scene to a Stage
-        Stage stage = new Stage();
-
-        stage.setScene(scene);
-        // Display the Stage (Headless because we use Monocle)
-        stage.show();
-    }
-
-    private static void doSnapshot(WebView webView, File outputFile) {
-        Platform.runLater(() -> {
-            WritableImage snapshot = webView.snapshot(null, null);
-            BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
-            try {
-                ImageIO.write(image, "png", outputFile);
-                if (DEBUG_MODE) {
-                    System.out.printf("Screenshot made and saved to [%s]%n", outputFile.getAbsolutePath());
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        });
-    }
 }
