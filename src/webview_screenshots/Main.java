@@ -18,6 +18,10 @@ public class Main extends Application {
     public void start(final Stage stage) {
 
         Map<String, String> namedParameters = getParameters().getNamed();
+        if (namedParameters.get("debug").equals("true")) {
+            DEBUG_MODE = true;
+            System.out.printf("Running application in debug mode, more logs!%n");
+        }
         if (DEBUG_MODE) {
             System.out.printf("Application 'start' method called with parameters: [%s]%n", namedParameters);
         }
@@ -46,7 +50,7 @@ public class Main extends Application {
 
         if (extraPageLoadTime == -1) {
             if (DEBUG_MODE) {
-                System.out.printf("WARNING: No or bad extraTime argument was passed. The extraTime in milliseconds can be passed with eg. --extraTime=4000 for 4 seconds, now using default: %s millis%n", DEFAULT_EXTRA_PAGE_LOAD_TIME);
+                System.out.printf("INFO: No or bad extraTime argument was passed. The extraTime in milliseconds can be passed with eg. --extraTime=4000 for 4 seconds, now using default: %s millis%n", DEFAULT_EXTRA_PAGE_LOAD_TIME);
             }
             extraPageLoadTime = DEFAULT_EXTRA_PAGE_LOAD_TIME;
         }
@@ -64,7 +68,7 @@ public class Main extends Application {
 
         if (webviewWidth == -1) {
             if (DEBUG_MODE) {
-                System.out.printf("WARNING: No or bad width argument was passed. The width in pixels can be passed with eg. --width=1000, now using default: %s pixels%n", DEFAULT_WEBVIEW_WIDTH);
+                System.out.printf("INFO: No or bad width argument was passed. The width in pixels can be passed with eg. --width=1000, now using default: %s pixels%n", DEFAULT_WEBVIEW_WIDTH);
             }
             webviewWidth = DEFAULT_WEBVIEW_WIDTH;
         }
@@ -82,7 +86,7 @@ public class Main extends Application {
 
         if (webviewHeight == -1) {
             if (DEBUG_MODE) {
-                System.out.printf("WARNING: No or bad height argument was passed. The height in pixels can be passed with eg. --height=1000, now using default: %s pixels%n", DEFAULT_WEBVIEW_HEIGHT);
+                System.out.printf("INFO: No or bad height argument was passed. The height in pixels can be passed with eg. --height=1000, now using default: %s pixels%n", DEFAULT_WEBVIEW_HEIGHT);
             }
             webviewHeight = DEFAULT_WEBVIEW_HEIGHT;
         }
