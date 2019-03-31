@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.web.WebEngine;
 import javafx.scene.web.WebView;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
@@ -23,11 +24,11 @@ import static webview_screenshots.StaticConfig.*;
 
 public class WebviewScreenshots {
     public static void takeScreenshot(String outputPath, String url) {
-        takeScreenshot(outputPath, url, DEFAULT_EXTRA_PAGE_LOAD_TIME, success -> {
+        takeScreenshot(outputPath, url, DEFAULT_EXTRA_PAGE_LOAD_TIME, DEFAULT_WEBVIEW_WIDTH, DEFAULT_WEBVIEW_HEIGHT, success -> {
         });
     }
 
-    public static void takeScreenshot(String outputPath, String url, int extraPageLoadTime, DoneCallback doneCallback) {
+    public static void takeScreenshot(String outputPath, String url, int extraPageLoadTime, int webviewWidth, int webviewHeight, DoneCallback doneCallback) {
         try {
             url = new URL(url).toString();
         } catch (MalformedURLException e) {
@@ -70,17 +71,18 @@ public class WebviewScreenshots {
                 }
             }
         });
-        startWebviewRendering(webView);
+        startWebviewRendering(webView, webviewWidth, webviewHeight);
     }
 
-    private static void startWebviewRendering(WebView webView) {
+    private static void startWebviewRendering(WebView webView, int width, int height) {
         // Create the VBox
         VBox root = new VBox();
         // Add the WebView to the VBox
         root.getChildren().add(webView);
+        webView.setPrefSize(width, height);
         Scene scene = new Scene(root);
         // Add  the Scene to a Stage
-        Stage stage = new Stage();
+        Stage stage = new Stage(StageStyle.UNDECORATED);
 
         stage.setScene(scene);
         // Display the Stage (Headless because we use Monocle)

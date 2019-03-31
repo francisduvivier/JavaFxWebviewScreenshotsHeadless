@@ -33,23 +33,60 @@ public class Main extends Application {
             url = DEMO_URL;
         }
 
-        int tempExtraPageLoadTime = -1;
+        int extraPageLoadTime = -1;
         String extraTimeArgument = namedParameters.get("extraTime");
 
         if (extraTimeArgument != null) {
             try {
-                tempExtraPageLoadTime = Integer.parseInt(extraTimeArgument);
+                extraPageLoadTime = Integer.parseInt(extraTimeArgument);
             } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        if (tempExtraPageLoadTime == -1) {
-            System.out.printf("WARNING: No or bad extraTime argument was passed. The extraTime in milliseconds can be passed with eg. --extraTime=4000 for 4 seconds, now using default: %s millis%n", DEFAULT_EXTRA_PAGE_LOAD_TIME);
-            tempExtraPageLoadTime = DEFAULT_EXTRA_PAGE_LOAD_TIME;
+        if (extraPageLoadTime == -1) {
+            if (DEBUG_MODE) {
+                System.out.printf("WARNING: No or bad extraTime argument was passed. The extraTime in milliseconds can be passed with eg. --extraTime=4000 for 4 seconds, now using default: %s millis%n", DEFAULT_EXTRA_PAGE_LOAD_TIME);
+            }
+            extraPageLoadTime = DEFAULT_EXTRA_PAGE_LOAD_TIME;
         }
-        final int extraPageLoadTime = tempExtraPageLoadTime;
-        takeScreenshot(outputPath, url, extraPageLoadTime, (success -> {
+
+        int webviewWidth = -1;
+        String widthArgument = namedParameters.get("width");
+
+        if (widthArgument != null) {
+            try {
+                webviewWidth = Integer.parseInt(widthArgument);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (webviewWidth == -1) {
+            if (DEBUG_MODE) {
+                System.out.printf("WARNING: No or bad width argument was passed. The width in pixels can be passed with eg. --width=1000, now using default: %s pixels%n", DEFAULT_WEBVIEW_WIDTH);
+            }
+            webviewWidth = DEFAULT_WEBVIEW_WIDTH;
+        }
+
+        int webviewHeight = -1;
+        String heightArgument = namedParameters.get("height");
+
+        if (heightArgument != null) {
+            try {
+                webviewHeight = Integer.parseInt(heightArgument);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        if (webviewHeight == -1) {
+            if (DEBUG_MODE) {
+                System.out.printf("WARNING: No or bad height argument was passed. The height in pixels can be passed with eg. --height=1000, now using default: %s pixels%n", DEFAULT_WEBVIEW_HEIGHT);
+            }
+            webviewHeight = DEFAULT_WEBVIEW_HEIGHT;
+        }
+        takeScreenshot(outputPath, url, extraPageLoadTime, webviewWidth, webviewHeight, (success -> {
             Platform.exit();
         }));
     }
