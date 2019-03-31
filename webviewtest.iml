@@ -7,6 +7,5 @@
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="org.testfx:openjfx-monocle:8u76-b04" level="project" />
   </component>
 </module>
