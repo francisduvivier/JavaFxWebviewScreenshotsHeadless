@@ -23,10 +23,11 @@ import static webviewSnapshot.StaticConfig.*;
 
 public class WebviewScreenshots {
     public static void takeScreenshot(String outputPath, String url) {
-        takeScreenshot(outputPath, url, DEFAULT_EXTRA_PAGE_LOAD_TIME);
+        takeScreenshot(outputPath, url, DEFAULT_EXTRA_PAGE_LOAD_TIME, success -> {
+        });
     }
 
-    public static void takeScreenshot(String outputPath, String url, int extraPageLoadTime) {
+    public static void takeScreenshot(String outputPath, String url, int extraPageLoadTime, DoneCallback doneCallback) {
         try {
             url = new URL(url).toString();
         } catch (MalformedURLException e) {
@@ -64,7 +65,7 @@ public class WebviewScreenshots {
                         } catch (InterruptedException e) {
                             e.printStackTrace();
                         }
-                        doSnapshot(webView, outputFile);
+                        doSnapshot(webView, outputFile, doneCallback);
                     }).start();
                 }
             }
@@ -86,7 +87,7 @@ public class WebviewScreenshots {
         stage.show();
     }
 
-    private static void doSnapshot(WebView webView, File outputFile) {
+    private static void doSnapshot(WebView webView, File outputFile, DoneCallback doneCallback) {
         Platform.runLater(() -> {
             WritableImage snapshot = webView.snapshot(null, null);
             BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
@@ -95,8 +96,10 @@ public class WebviewScreenshots {
                 if (DEBUG_MODE) {
                     System.out.printf("Screenshot made and saved to [%s]%n", outputFile.getAbsolutePath());
                 }
+                doneCallback.onReady(true);
             } catch (IOException e) {
                 e.printStackTrace();
+                doneCallback.onReady(false);
             }
         });
     }

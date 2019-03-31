@@ -1,7 +1,7 @@
 package webviewSnapshot;
 
-import com.sun.istack.internal.NotNull;
 import javafx.application.Application;
+import javafx.application.Platform;
 import javafx.stage.Stage;
 
 import java.util.Map;
@@ -49,7 +49,9 @@ public class Main extends Application {
             tempExtraPageLoadTime = DEFAULT_EXTRA_PAGE_LOAD_TIME;
         }
         final int extraPageLoadTime = tempExtraPageLoadTime;
-        takeScreenshot(outputPath, url, extraPageLoadTime);
+        takeScreenshot(outputPath, url, extraPageLoadTime, (success -> {
+            Platform.exit();
+        }));
     }
 
 
