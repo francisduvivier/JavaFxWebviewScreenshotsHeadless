@@ -94,8 +94,10 @@ public class WebViewSnapshotter extends Application {
                 if (DEBUG_MODE) {
                     System.out.printf("Received page state: [%s], now waiting for %s seconds to make screenshot%n", newState, extraPageLoadTime / 1000D);
                 }
-                if (newState == State.SUCCEEDED) {
-
+                if (newState == State.SUCCEEDED || newState == State.FAILED || newState == State.CANCELLED) {
+                    if (newState == State.FAILED || newState == State.CANCELLED) {
+                        System.out.printf("WARNING: Page load was not successful, received state [%s] but trying to make a screenshot anyways%n", newState);
+                    }
                     new Thread(() -> {
                         try {
                             Thread.sleep(extraPageLoadTime); //Wait extra because async javascript might still be executing and changing the page.
