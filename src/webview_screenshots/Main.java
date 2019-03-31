@@ -1,4 +1,4 @@
-package webviewSnapshot;
+package webview_screenshots;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -6,8 +6,8 @@ import javafx.stage.Stage;
 
 import java.util.Map;
 
-import static webviewSnapshot.StaticConfig.*;
-import static webviewSnapshot.WebviewScreenshots.takeScreenshot;
+import static webview_screenshots.StaticConfig.*;
+import static webview_screenshots.WebviewScreenshots.takeScreenshot;
 
 public class Main extends Application {
     public static void main(String[] args) {

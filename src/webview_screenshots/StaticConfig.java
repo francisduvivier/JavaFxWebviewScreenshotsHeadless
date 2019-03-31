@@ -1,4 +1,4 @@
-package webviewSnapshot;
+package webview_screenshots;
 
 public class StaticConfig {
     public static final int DEFAULT_EXTRA_PAGE_LOAD_TIME = 5000;

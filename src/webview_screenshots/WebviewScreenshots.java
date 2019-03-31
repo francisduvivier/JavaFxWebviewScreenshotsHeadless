@@ -1,4 +1,4 @@
-package webviewSnapshot;
+package webview_screenshots;
 
 import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-import static webviewSnapshot.StaticConfig.*;
+import static webview_screenshots.StaticConfig.*;
 
 public class WebviewScreenshots {
     public static void takeScreenshot(String outputPath, String url) {
