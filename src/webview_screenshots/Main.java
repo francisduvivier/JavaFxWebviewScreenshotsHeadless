@@ -53,6 +53,4 @@ public class Main extends Application {
             Platform.exit();
         }));
     }
-
-
 }
