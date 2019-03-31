@@ -70,6 +70,10 @@ public class WebViewSnapshotter extends Application {
             tempExtraPageLoadTime = DEFAULT_EXTRA_PAGE_LOAD_TIME;
         }
         final int extraPageLoadTime = tempExtraPageLoadTime;
+        takeScreenshot(stage, outputPath, url, extraPageLoadTime);
+    }
+
+    public static void takeScreenshot(Stage stage, String outputPath, String url, int extraPageLoadTime) {
         try {
             url = new URL(url).toString();
         } catch (MalformedURLException e) {
@@ -77,7 +81,9 @@ public class WebViewSnapshotter extends Application {
             e.printStackTrace();
             url = DEMO_URL;
         }
-
+        if (stage == null) {
+            stage = new Stage();
+        }
         // Create the WebView
         WebView webView = new WebView();
         // Create the WebEngine
@@ -115,7 +121,7 @@ public class WebViewSnapshotter extends Application {
         startWebviewRendering(stage, webView);
     }
 
-    private void startWebviewRendering(Stage stage, WebView webView) {
+    private static void startWebviewRendering(Stage stage, WebView webView) {
         // Create the VBox
         VBox root = new VBox();
         // Add the WebView to the VBox
@@ -127,7 +133,7 @@ public class WebViewSnapshotter extends Application {
         stage.show();
     }
 
-    private void doSnapshot(WebView webView, File outputFile) {
+    private static void doSnapshot(WebView webView, File outputFile) {
         Platform.runLater(() -> {
             WritableImage snapshot = webView.snapshot(null, null);
             BufferedImage image = SwingFXUtils.fromFXImage(snapshot, null);
