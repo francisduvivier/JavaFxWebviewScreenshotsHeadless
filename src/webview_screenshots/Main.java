@@ -4,6 +4,7 @@ import javafx.application.Application;
 import javafx.application.Platform;
 import javafx.stage.Stage;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static webview_screenshots.StaticConfig.*;
@@ -18,7 +19,7 @@ public class Main extends Application {
     public void start(final Stage stage) {
 
         Map<String, String> namedParameters = getParameters().getNamed();
-        if (namedParameters.get("debug").equals("true")) {
+        if (namedParameters.get("debug") != null && namedParameters.get("debug").equals("true")) {
             DEBUG_MODE = true;
             System.out.printf("Running application in debug mode, more logs!%n");
         }
