@@ -6,6 +6,6 @@
  
 ### How to use
 - Make sure the Monocle jar from the lib folder (openjfx-monocle-8u76-b04.jar) is in your classpath. To do this
-  - On Windows place the openjfx-monocle-8u76-b04.jar file into the lib\ext folder of your jre, typically located at `"C:\Program Files\Java\jdk1.8.0_201\jre\lib\ext"`
-  - On Mac, this place the openjfx-monocle-8u76-b04.jar file into `/Library/Java/JavaVirtualMachines/<jdk version>/Contents/Home/` 
+  - On Windows, place the openjfx-monocle-8u76-b04.jar file into the lib\ext folder of your jre, typically located at `"C:\Program Files\Java\jdk1.8.0_201\jre\lib\ext"`
+  - On Mac, place the openjfx-monocle-8u76-b04.jar file into `/Library/Java/JavaVirtualMachines/jdk1.8.0_201.jdk/Contents/Home/jre/lib/ext/`
 - Then (from the project directory) use `java -Dglass.platform=Monocle -jar out/javaFXScreenshots.jar --url=https://example.com --path=path/to/file.png`
