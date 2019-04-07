@@ -1,3 +1,4 @@
 .idea
 *.png
 out/production/JavaFXScreenshotProject/webview_screenshots/**/*
+*.class
